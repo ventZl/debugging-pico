@@ -1,0 +1,53 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+			// Nazov polozky v paneli, nema vplyv na funkcnost
+            "name": "Pico Debug",
+            "cwd": "${workspaceRoot}",
+            "executable": "${command:cmake.launchTargetPath}",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            // Ak pouzivate Ubuntu, nie je potrebne tuto hodnotu menit
+			// Ak by ste pouzivali iny system, alebo vyuzili toolchain
+			// priamo od ARM-u, je mozne, ze tuto hodnotu bude nutne zmenit
+			// na arm-none-eabi-gdb
+            "gdbPath" : "gdb-multiarch",
+			// Tato hodnota urcuje na akom procesore sa debuguje,
+			// pri praci s Raspberry Pi Pico, alebo jeho klonmi nie je
+			// potrebne hodnotu menit. Ak by ste pouzivali ine zariadenie,
+			// napriklad vyvojovu dosku od STM32, je potrebne sem zadat
+			// typ procesora, ktory je na doske osadeny
+            "device": "RP2040",
+			// Nastavenie pre OpenOCD, je potrebne ho menit iba ak budete
+			// pouzivat hardware iny ako Raspberry Pi Pico a HW debugger
+			// iny ako Picoprobe
+            "configFiles": [
+				// Urcuje typ HW debuggera, ine bezne moznosti su napriklad
+				// interface/stlink.cfg pre STM32 ST-Link a dosky STM32 Discovery
+				// a STM32 Nucleo
+                "interface/picoprobe.cfg",
+				// Urcuje typ osadeneho procesora, zalezi od procesora osadeneho
+				// na doske s ktorou pracujete
+                "target/rp2040.cfg"
+            ],
+			// Out of box konfiguracia, funguje iba ako pico-sdk a projektovy adresar
+			// su v rovnakom podadresari. Zmente tuto cestu, ak ste pico-sdk vyklonovali
+			// inam.
+            "svdFile": "../pico-sdk/src/rp2040/hardware_regs/rp2040.svd",
+            "runToMain": true,
+            // Work around for stopping at main on restart
+            "postRestartCommands": [
+                "break main",
+                "continue"
+            ],
+			// Cesta k miestu, kam sa skompilovalo a nainstalovalo OpenOCD.
+			// Za beznych okolnosti pri manualnej instalacii nie je potrebne
+			// tuto cestu menit. V pripade, ze bude podpora pre Picoprobe zahrnuta
+			// do oficialneho release a tento bude dostupny v repozitaroch, staci
+			// cestu zmenit na /usr/share/openocd/scripts
+            "searchDir": ["/usr/local/share/openocd/scripts"]
+        }
+    ]
+}

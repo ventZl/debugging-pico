@@ -1,0 +1,5 @@
+# Tento riadok povie systemu, ze zariadenie s USB ID 2E8A:0004 - Picoprobe ma
+# byt dostupne pre vsetkych pouzivatelov v skupine plugdev. V Ubuntu su v tejto
+# skupine standardne vsetci pouzivatelia. Ak pouzivate iny system, zmente
+# hodnotu `plugdev` na niektoru, ktoru ziskate z vystupu prikazu `groups`
+SUBSYSTEM=="usb", ATTR{idVendor}=="2e8a", ATTR{idProduct}=="0004", GROUP="plugdev"
